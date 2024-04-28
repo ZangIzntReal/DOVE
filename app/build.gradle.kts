@@ -63,4 +63,6 @@ dependencies {
 
     implementation("com.google.firebase:firebase-database:20.0.0")
     implementation("com.google.firebase:firebase-auth:21.0.1")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 }

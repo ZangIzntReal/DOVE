@@ -54,10 +54,6 @@ class LoginActivity : AppCompatActivity() {
                     val user = auth.currentUser
                     Toast.makeText(this, "Login success", Toast.LENGTH_SHORT).show()
                     database.getReference("Users").child(user?.uid.toString()).child("status").setValue("online")
-                    database.getReference("Users").child(user!!.uid).get().addOnSuccessListener {
-                        val userInfo = it.getValue(User::class.java)
-                        // userInfo now contains the user's information
-                    }
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {

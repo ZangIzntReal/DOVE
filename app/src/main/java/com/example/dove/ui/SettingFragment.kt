@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.example.dove.R
 import com.example.dove.databinding.FragmentSettingBinding
 
 class SettingFragment : Fragment() {
@@ -22,9 +24,10 @@ class SettingFragment : Fragment() {
     ): View? {
         binding = FragmentSettingBinding.inflate(inflater, container, false)
 
+        val controller = findNavController()
+
         binding.llPersonal.setOnClickListener(View.OnClickListener {
-            val intent = Intent(activity, WelcomeActivity::class.java)
-            startActivity(intent)
+            controller.navigate(R.id.personalChatFragment)
         })
 
         return binding.root

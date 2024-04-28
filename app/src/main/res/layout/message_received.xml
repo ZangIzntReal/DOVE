@@ -8,7 +8,7 @@
     android:background="@drawable/message_received"
     android:orientation="vertical"
     android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp"
+    android:layout_marginEnd="50dp"
     android:padding="15dp"
     android:layout_height="wrap_content">
 
