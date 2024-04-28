@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "177595086497",
+    "firebase_url": "https://dove-26afd-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "dove-26afd",
+    "storage_bucket": "dove-26afd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177595086497:android:92cc441ee41e1e13ab62e0",
+        "android_client_info": {
+          "package_name": "com.example.dove"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCffNlIwel7jdjuZgqoctpHey6IxbIn6CY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

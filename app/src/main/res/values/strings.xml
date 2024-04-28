@@ -13,4 +13,17 @@
     <string name="account">Account</string>
     <string name="language">Language</string>
     <string name="notification">Notification</string>
+    <string name="setting">Setting</string>
+    <string name="resigter">Resigter</string>
+    <string name="register">register</string>
+    <string name="already_got_an_account_login">Already got an account? Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="enter_password">Enter password</string>
+    <string name="enter_name">Enter name</string>
+    <string name="email">Email</string>
+    <string name="login_to_your_account">Login to your account</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="create_a_new_account">Create a new account</string>
+    <string name="enter_email">Enter email</string>
 </resources>

@@ -6,12 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.dove.R
-import com.example.dove.databinding.FragmentProfileBinding
+import com.example.dove.databinding.FragmentSettingBinding
 
-class ProfileFragment : Fragment() {
+class SettingFragment : Fragment() {
 
-    private lateinit var binding: FragmentProfileBinding
+    private lateinit var binding: FragmentSettingBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +20,7 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        binding = FragmentSettingBinding.inflate(inflater, container, false)
 
         binding.llPersonal.setOnClickListener(View.OnClickListener {
             val intent = Intent(activity, WelcomeActivity::class.java)

@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.profileFragment -> {
-                    controller.navigate(R.id.profileFragment)
+                R.id.settingFragment -> {
+                    controller.navigate(R.id.settingFragment)
                     true
                 }
 
