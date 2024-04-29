@@ -26,4 +26,6 @@
     <string name="login">Login</string>
     <string name="create_a_new_account">Create a new account</string>
     <string name="enter_email">Enter email</string>
+    <string name="add_contact">Add Contact</string>
+    <string name="add">Add</string>
 </resources>

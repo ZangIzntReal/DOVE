@@ -63,10 +63,18 @@ class RegisterActivity : AppCompatActivity() {
                         status = "offline",
                         imageUrl = "",
                         username = name,
-                        useremail = email
+                        email = email
                     )
                     // Lưu thông tin User vào database
                     database.getReference("Users").child(auth.currentUser?.uid!!).setValue(User)
+                    // Tọa node mới trong database để lưu quan hệ giữa email và userId
+                    val user = auth.currentUser
+                    val userId = user?.uid
+                    if (userId != null) {
+                        // Create a new node in the database for the relationship between email and userId
+                        val emailToUserIdRef = database.getReference("EmailToUserId").child(email.replace(".", ","))
+                        emailToUserIdRef.setValue(userId)
+                    }
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()
                 }

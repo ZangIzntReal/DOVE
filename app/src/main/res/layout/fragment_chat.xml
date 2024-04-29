@@ -55,6 +55,7 @@
             android:id="@+id/rvChats"
             android:layout_width="match_parent"
             android:layout_marginStart="20dp"
+            tools:listitem="@layout/recent_chat"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="20dp"
             android:layout_height="wrap_content" />

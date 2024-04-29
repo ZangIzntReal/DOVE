@@ -59,13 +59,13 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvPhone"
+                android:id="@+id/tvEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvName"
                 android:layout_marginStart="10dp"
                 android:layout_toEndOf="@+id/cvAvatar"
-                android:text="012345678910"
+                android:text="zanggg@gmail.com"
                 android:textColor="@color/hint"
                 android:textSize="20sp" />
 

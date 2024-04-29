@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.dove.R
+import com.example.dove.databinding.FragmentChatBinding
 
 
 class ChatFragment : Fragment() {
+
+    private lateinit var binding: FragmentChatBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }

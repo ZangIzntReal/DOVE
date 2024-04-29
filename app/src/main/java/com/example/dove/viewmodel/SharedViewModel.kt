@@ -5,4 +5,8 @@ import com.example.dove.data.model.User
 
 class SharedViewModel: ViewModel() {
     var currentUser: User? = null
+
+    fun setCurrentUser(user: User) {
+        currentUser = user
+    }
 }
