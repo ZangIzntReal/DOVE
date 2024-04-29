@@ -25,7 +25,7 @@ class ContactFragment : Fragment() {
     private val contactViewModel: ContactViewModel by viewModels()
     private var contactList = mutableListOf<Contact>()
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    private val currentUser = sharedViewModel.currentUser
+    private var currentUser: User? = null
     private lateinit var database: FirebaseDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +42,9 @@ class ContactFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Lấy thông tin người dùng hiện tại
+        currentUser = sharedViewModel.currentUser
 
         // Khởi tạo database
         database = FirebaseDatabase.getInstance()

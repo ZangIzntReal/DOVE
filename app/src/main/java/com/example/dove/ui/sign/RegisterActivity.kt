@@ -2,6 +2,7 @@ package com.example.dove.ui.sign
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -47,6 +48,7 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show()
             }
             else {
+                Toast.makeText(this, "Registering...", Toast.LENGTH_SHORT).show()
                 registerUser(email, password, name)
             }
         }
@@ -63,7 +65,9 @@ class RegisterActivity : AppCompatActivity() {
                         status = "offline",
                         imageUrl = "",
                         username = name,
-                        email = email
+                        email = email,
+                        contacts = mutableListOf(),
+                        chats = mutableListOf()
                     )
                     // Lưu thông tin User vào database
                     database.getReference("Users").child(auth.currentUser?.uid!!).setValue(User)
@@ -75,8 +79,15 @@ class RegisterActivity : AppCompatActivity() {
                         val emailToUserIdRef = database.getReference("EmailToUserId").child(email.replace(".", ","))
                         emailToUserIdRef.setValue(userId)
                     }
+                    // Hiển thị thông báo đăng ký thành công
+                    Toast.makeText(this, "Register successful", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()
+                }
+                else {
+                    // Hiển thị thông báo lỗi nếu đăng ký thất bại
+                    Log.e("RegisterActivity", "Failed to create user", task.exception)
+                    Toast.makeText(this, "Register failed", Toast.LENGTH_SHORT).show()
                 }
             }
     }

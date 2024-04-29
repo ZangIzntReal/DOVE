@@ -6,8 +6,8 @@ data class User(
     val imageUrl : String? = "",
     var username: String? = "",
     val email : String? ="",
-    var contacts: List<Contact>? = listOf(),
-    var chats: List<Chat>? = listOf()
+    var contacts: List<Contact>? = mutableListOf(),
+    var chats: List<Chat>? = mutableListOf()
 ) {
    public fun getChatWithUser(user: User): Chat? {
         for (chat in chats!!) {

@@ -36,7 +36,7 @@ class SettingFragment : Fragment() {
 
         val currentUser = sharedViewModel.currentUser
         binding.tvName.text = currentUser?.username
-        binding.tvEmail.text = currentUser?.useremail
+        binding.tvEmail.text = currentUser?.email
 
 //        binding.btnLogout.setOnClickListener {
 //            sharedViewModel.currentUser = null

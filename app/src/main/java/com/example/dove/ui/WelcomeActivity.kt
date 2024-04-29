@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.dove.R
 import com.example.dove.databinding.ActivityWelcomeBinding
+import com.example.dove.ui.sign.LoginActivity
 
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
@@ -25,7 +26,8 @@ class WelcomeActivity : AppCompatActivity() {
         }
 
         binding.btnStart.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
+
         }
     }
 }
