@@ -7,15 +7,20 @@ data class User(
     var username: String? = "",
     val email : String? ="",
     var contacts: List<Contact>? = mutableListOf(),
-    var chats: List<Chat>? = mutableListOf()
+    var chats: List<String>? = mutableListOf(),
+    var exitChat: List<String>? = mutableListOf()
 ) {
-   public fun getChatWithUser(user: User): Chat? {
-        for (chat in chats!!) {
-            if (chat.userA.userid == user.userid || chat.userB.userid == user.userid) {
-                return chat
-            }
-        }
-        return null
+
+    public fun addChat(chatId: String?) {
+        val newChats = chats!!.toMutableList()
+        newChats.add(chatId!!)
+        chats = newChats
+    }
+
+    public fun addExitChat(userId: String?) {
+        val newExitChats = exitChat!!.toMutableList()
+        newExitChats.add(userId!!)
+        exitChat = newExitChats
     }
 
     public fun addNewContact(contact: Contact) {

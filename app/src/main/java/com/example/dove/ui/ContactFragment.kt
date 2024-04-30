@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dove.R
 import com.example.dove.adapter.ContactAdapter
+import com.example.dove.data.model.Chat
 import com.example.dove.data.model.Contact
 import com.example.dove.data.model.User
 import com.example.dove.databinding.FragmentContactBinding
@@ -79,37 +81,89 @@ class ContactFragment : Fragment() {
             dialog.show(childFragmentManager, "AddContactDialogFragment")
         }
 
+        // Thiết lập listener cho sự kiện click vào contact
+        contactAdapter.onContactClick = object : ContactAdapter.OnContactClick {
+            override fun onContactClick(position: Int) {
+                val contact = contactAdapter.getContacts()[position]
+                database.getReference("Users").child(contact.id.toString()).get().addOnSuccessListener { dataSnapshot ->
+                    if (dataSnapshot.exists()) {
+                        val user1 = currentUser
+                        val user2 = dataSnapshot.getValue(User::class.java)!!
+                        Log.d("ContactFragment", "User A: $user1")
+                        Log.d("ContactFragment", "User B: $user2")
+                        if (user1 != null && checkNotExistingChat(user1, user2)) {
+                            val id = database.getReference("Chats").push().key
+                            val chat = Chat(
+                                id,
+                                user1.userid,
+                                user2.userid,
+                                mutableListOf()
+                            )
+                            database.getReference("Chats").child(id.toString()).setValue(chat)
+                            user1.addChat(id)
+                            user2.addChat(id)
+                            user1.addExitChat(user2.userid)
+                            user2.addExitChat(user1.userid)
+                            sharedViewModel.currentUser = user1
+                            database.getReference("Users").child(user1.userid.toString()).setValue(user1)
+                            database.getReference("Users").child(user2.userid.toString()).setValue(user2)
+
+                            val action = ContactFragmentDirections.actionContactFragmentToPersonalChatFragment(id)
+                            findNavController().navigate(action)
+                        }
+                        else {
+                            Toast.makeText(context, "Chat already exists", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checkNotExistingChat(user1: User, user2: User): Boolean {
+        return user1.exitChat?.find { it == user2.userid } == null
     }
 
     private fun addNewContact(tmpEmail: String) {
         val email = tmpEmail.replace(".", ",")
-        database.getReference("EmailToUserId").child(email).get().addOnSuccessListener { dataSnapshot ->
-            if (dataSnapshot.exists()) {
-                val id = dataSnapshot.value.toString()
-                Log.d("ContactFragment", "User id: $id")
-                database.getReference("Users").child(id).get().addOnSuccessListener { userSnapshot ->
-                    if (userSnapshot.exists()) {
-                        Toast.makeText(context, "User found", Toast.LENGTH_SHORT).show()
-                        val newUser = userSnapshot.getValue(User::class.java)
-                        Log.d("ContactFragment", "New user: $newUser")
-                        val newContact = Contact(
-                            id = newUser?.userid,
-                            email = newUser?.email,
-                        )
-                        Log.d("ContactFragment", "New contact: $newContact")
-                        updateContactList(newContact)
-                        contactViewModel.addContact(newContact)
-                        Log.d("ContactFragment", "Contacts size: ${contactViewModel.contacts.value?.size}")
-                    }
-                    else {
-                        // Hiển thị thông báo lỗi
-                        Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
-                    }
+        if (email == currentUser?.email) {
+            Toast.makeText(context, "Cannot add yourself", Toast.LENGTH_SHORT).show()
+            return
+        }
+        else if (currentUser?.contacts?.find { it.email == email } != null) {
+            Toast.makeText(context, "Contact already exists", Toast.LENGTH_SHORT).show()
+        }
+        else {
+            database.getReference("EmailToUserId").child(email).get().addOnSuccessListener { dataSnapshot ->
+                if (dataSnapshot.exists()) {
+                    val id = dataSnapshot.value.toString()
+                    Log.d("ContactFragment", "User id: $id")
+                    database.getReference("Users").child(id).get()
+                        .addOnSuccessListener { userSnapshot ->
+                            if (userSnapshot.exists()) {
+                                Toast.makeText(context, "User found", Toast.LENGTH_SHORT).show()
+                                val newUser = userSnapshot.getValue(User::class.java)
+                                Log.d("ContactFragment", "New user: $newUser")
+                                val newContact = Contact(
+                                    id = newUser?.userid,
+                                    email = newUser?.email,
+                                )
+                                Log.d("ContactFragment", "New contact: $newContact")
+                                updateContactList(newContact)
+                                contactViewModel.addContact(newContact)
+                                Log.d(
+                                    "ContactFragment",
+                                    "Contacts size: ${contactViewModel.contacts.value?.size}"
+                                )
+                            } else {
+                                // Hiển thị thông báo lỗi
+                                Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                } else {
+                    // Hiển thị thông báo lỗi
+                    Toast.makeText(context, "Id not found", Toast.LENGTH_SHORT).show()
                 }
-            }
-            else {
-                // Hiển thị thông báo lỗi
-                Toast.makeText(context, "Id not found", Toast.LENGTH_SHORT).show()
             }
         }
     }

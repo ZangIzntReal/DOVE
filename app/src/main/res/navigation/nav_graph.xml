@@ -18,7 +18,11 @@
             app:destination="@id/contactFragment" />
         <action
             android:id="@+id/action_chatFragment_to_personalChatFragment"
-            app:destination="@id/personalChatFragment" />
+            app:destination="@id/personalChatFragment" >
+            <argument
+                android:name="key"
+                app:argType="string" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -43,12 +47,22 @@
         <action
             android:id="@+id/action_contactFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_contactFragment_to_personalChatFragment"
+            app:destination="@id/personalChatFragment" >
+            <argument
+                android:name="key"
+                app:argType="string" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/personalChatFragment"
         android:name="com.example.dove.ui.PersonalChatFragment"
         android:label="fragment_personal_chat"
         tools:layout="@layout/fragment_personal_chat" >
+        <argument
+            android:name="key"
+            app:argType="string" />
         <action
             android:id="@+id/action_personalChatFragment_to_chatFragment"
             app:destination="@id/chatFragment" />

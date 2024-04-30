@@ -22,6 +22,10 @@ class ContactAdapter: RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
     // biến lưu trữ hàm xử lý sự kiện
     lateinit var onContactClick: OnContactClick
 
+    fun getContacts(): List<Contact> {
+        return listOfContact
+    }
+
     fun setContacts(contacts: List<Contact>) {
         this.listOfContact = contacts
         notifyDataSetChanged()
