@@ -7,13 +7,13 @@ data class User(
     var username: String? = "",
     val email : String? ="",
     var contacts: List<Contact>? = mutableListOf(),
-    var chats: List<String>? = mutableListOf(),
+    var chats: List<Chat>? = mutableListOf(),
     var exitChat: List<String>? = mutableListOf()
 ) {
 
-    public fun addChat(chatId: String?) {
+    public fun addNewChat(chat: Chat) {
         val newChats = chats!!.toMutableList()
-        newChats.add(chatId!!)
+        newChats.add(chat)
         chats = newChats
     }
 

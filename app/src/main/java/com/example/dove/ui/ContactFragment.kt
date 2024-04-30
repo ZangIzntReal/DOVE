@@ -100,8 +100,8 @@ class ContactFragment : Fragment() {
                                 mutableListOf()
                             )
                             database.getReference("Chats").child(id.toString()).setValue(chat)
-                            user1.addChat(id)
-                            user2.addChat(id)
+                            user1.addNewChat(chat)
+                            user2.addNewChat(chat)
                             user1.addExitChat(user2.userid)
                             user2.addExitChat(user1.userid)
                             sharedViewModel.currentUser = user1

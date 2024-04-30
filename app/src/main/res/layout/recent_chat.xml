@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_marginBottom="10dp"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvStatus"
+            android:id="@+id/tvLastMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvName"
