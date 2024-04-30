@@ -125,7 +125,7 @@ class ContactFragment : Fragment() {
 
     private fun addNewContact(tmpEmail: String) {
         val email = tmpEmail.replace(".", ",")
-        if (email == currentUser?.email) {
+        if (tmpEmail == currentUser?.email) {
             Toast.makeText(context, "Cannot add yourself", Toast.LENGTH_SHORT).show()
             return
         }
