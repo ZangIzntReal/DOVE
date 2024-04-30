@@ -13,8 +13,6 @@ import com.google.firebase.database.FirebaseDatabase
 
 class ContactAdapter: RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
 
-    private lateinit var database: FirebaseDatabase
-
     private var listOfContact = listOf<Contact>()
 
     interface OnContactClick {
@@ -45,7 +43,7 @@ class ContactAdapter: RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         val contact = listOfContact[position]
         holder.apply {
-            tvName.text = contact.email
+            tvName.text = contact.email.toString()
         }
         holder.itemView.setOnClickListener(View.OnClickListener {
             onContactClick.onContactClick(position)

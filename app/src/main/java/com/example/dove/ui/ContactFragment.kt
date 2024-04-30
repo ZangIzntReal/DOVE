@@ -1,6 +1,7 @@
 package com.example.dove.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -45,21 +46,24 @@ class ContactFragment : Fragment() {
 
         // Lấy thông tin người dùng hiện tại
         currentUser = sharedViewModel.currentUser
+        Log.d("ContactFragment", "Current user: $currentUser")
 
         // Khởi tạo database
         database = FirebaseDatabase.getInstance()
 
         // Thiết lập rvContacts
         binding.rvContacts.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = contactAdapter
         }
         // Lấy danh sách contact từ database
         contactList = currentUser?.contacts as MutableList<Contact>
+        Log.d("ContactFragment", "contactList: $contactList")
         // Set danh sách contact vào ContactViewModel
         contactViewModel.setContacts(contactList)
         // Quan sát LiveData contacts từ ContactViewModel
         contactViewModel.contacts.observe(viewLifecycleOwner) {
+            Log.d("ContactFragment", "Contacts: ${it.size}")
             contactAdapter.setContacts(it)
         }
         // Thiết lập listener cho sự kiện thêm contact
@@ -67,6 +71,8 @@ class ContactFragment : Fragment() {
             val dialog = AddContactDialogFragment()
             dialog.listener = object : AddContactDialogFragment.AddContactDialogListener {
                 override fun onDialogPositiveClick(email: String) {
+                    Toast.makeText(context, "Email: $email", Toast.LENGTH_SHORT).show()
+                    Log.d("ContactFragment", "Email: $email")
                     addNewContact(email)
                 }
             }
@@ -75,31 +81,44 @@ class ContactFragment : Fragment() {
 
     }
 
-    private fun addNewContact(email: String) {
-        val myRef = database.getReference("users").orderByChild("email").equalTo(email)
-        myRef.get().addOnSuccessListener {
-            if (it.exists()) {
-                val newUser = it.children.first().getValue(User::class.java)
-                val newContact = Contact(
-                    id = newUser?.userid,
-                    email = newUser?.email,
-                )
-                updateContactList(newContact)
-                contactList.add(newContact)
-                contactViewModel.setContacts(contactList)
+    private fun addNewContact(tmpEmail: String) {
+        val email = tmpEmail.replace(".", ",")
+        database.getReference("EmailToUserId").child(email).get().addOnSuccessListener { dataSnapshot ->
+            if (dataSnapshot.exists()) {
+                val id = dataSnapshot.value.toString()
+                Log.d("ContactFragment", "User id: $id")
+                database.getReference("Users").child(id).get().addOnSuccessListener { userSnapshot ->
+                    if (userSnapshot.exists()) {
+                        Toast.makeText(context, "User found", Toast.LENGTH_SHORT).show()
+                        val newUser = userSnapshot.getValue(User::class.java)
+                        Log.d("ContactFragment", "New user: $newUser")
+                        val newContact = Contact(
+                            id = newUser?.userid,
+                            email = newUser?.email,
+                        )
+                        Log.d("ContactFragment", "New contact: $newContact")
+                        updateContactList(newContact)
+                        contactViewModel.addContact(newContact)
+                        Log.d("ContactFragment", "Contacts size: ${contactViewModel.contacts.value?.size}")
+                    }
+                    else {
+                        // Hiển thị thông báo lỗi
+                        Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
             else {
                 // Hiển thị thông báo lỗi
-                Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Id not found", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
     private fun updateContactList(newContact: Contact) {
         val tmpUser = currentUser
         tmpUser?.addNewContact(newContact)
         sharedViewModel.currentUser = tmpUser
-        database.getReference("users").child(currentUser?.userid.toString()).setValue(tmpUser)
+        currentUser = tmpUser // Cập nhật currentUser trong ContactFragment
+        database.getReference("Users").child(currentUser?.userid.toString()).setValue(tmpUser)
     }
 }
