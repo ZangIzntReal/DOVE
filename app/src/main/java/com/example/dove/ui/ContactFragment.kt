@@ -92,7 +92,7 @@ class ContactFragment : Fragment() {
                         Log.d("ContactFragment", "User A: $user1")
                         Log.d("ContactFragment", "User B: $user2")
                         if (user1 != null && checkNotExistingChat(user1, user2)) {
-                            val id = database.getReference("Chats").push().key
+                            val id = database.getReference("Chats").push().key.toString()
                             val chat = Chat(
                                 id,
                                 user1.userid,
@@ -107,9 +107,8 @@ class ContactFragment : Fragment() {
                             sharedViewModel.currentUser = user1
                             database.getReference("Users").child(user1.userid.toString()).setValue(user1)
                             database.getReference("Users").child(user2.userid.toString()).setValue(user2)
-
-                            val action = ContactFragmentDirections.actionContactFragmentToPersonalChatFragment(id)
-                            findNavController().navigate(action)
+                            sharedViewModel.currentChat = chat
+                            findNavController().navigate(R.id.personalChatFragment)
                         }
                         else {
                             Toast.makeText(context, "Chat already exists", Toast.LENGTH_SHORT).show()

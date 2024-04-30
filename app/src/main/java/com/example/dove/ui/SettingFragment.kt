@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.dove.R
 import com.example.dove.databinding.FragmentSettingBinding
+import com.example.dove.ui.sign.LoginActivity
 import com.example.dove.viewmodel.SharedViewModel
 
 class SettingFragment : Fragment() {
@@ -38,9 +39,11 @@ class SettingFragment : Fragment() {
         binding.tvName.text = currentUser?.username
         binding.tvEmail.text = currentUser?.email
 
-//        binding.btnLogout.setOnClickListener {
-//            sharedViewModel.currentUser = null
-//            findNavController().navigate(R.id.action_settingFragment_to_loginFragment)
-//        }
+        binding.llPersonal.setOnClickListener {
+            sharedViewModel.logout()
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
     }
 }

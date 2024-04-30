@@ -14,9 +14,9 @@ class ChatViewModel: ViewModel() {
     fun setChats(chats: List<Chat>) {
         _chats.value = chats
     }
-    fun addContact(chat: Chat) {
-        val currentContacts = _chats.value?.toMutableList() ?: mutableListOf()
-        currentContacts.add(chat)
-        _chats.value = currentContacts
+    fun addChat(chat: Chat) {
+        val currentChats = _chats.value?.toMutableList() ?: mutableListOf()
+        currentChats.add(chat)
+        _chats.value = currentChats
     }
 }

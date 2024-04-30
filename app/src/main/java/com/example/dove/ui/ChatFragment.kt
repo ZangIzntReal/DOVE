@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -25,12 +26,12 @@ import com.google.firebase.database.FirebaseDatabase
 class ChatFragment : Fragment() {
 
     private lateinit var binding: FragmentChatBinding
-    private val chatAdapter = ChatAdapter()
     private val chatViewModel: ChatViewModel by viewModels()
     private var chatList = mutableListOf<Chat>()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private var currentUser: User? = null
     private lateinit var database: FirebaseDatabase
+    private val chatAdapter by lazy { ChatAdapter(sharedViewModel) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -59,8 +60,14 @@ class ChatFragment : Fragment() {
             adapter = chatAdapter
         }
 
-        // Get chats from current user
-        chatList = currentUser?.chats as MutableList<Chat>
+        /// Get chats from current user
+        chatList = currentUser?.chats?.toMutableList() ?: mutableListOf()
+//        val tmpChatList = currentUser?.chats
+//        if (tmpChatList != null) {
+//            chatList = tmpChatList.toMutableList()
+//        } else {
+//            chatList = mutableListOf()
+//        }
         // Set chats to ChatViewModel
         chatViewModel.setChats(chatList)
 
@@ -75,8 +82,8 @@ class ChatFragment : Fragment() {
             // Call when a chat is clicked, navigate to chat activity
             override fun onChatClick(position: Int) {
                 val chat = chatAdapter.getChats()[position]
-                val action = ContactFragmentDirections.actionContactFragmentToPersonalChatFragment(chat.id)
-                findNavController().navigate(action)
+                sharedViewModel.currentChat = chat
+                findNavController().navigate(R.id.personalChatFragment)
             }
         }
     }
