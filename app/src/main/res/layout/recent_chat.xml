@@ -22,8 +22,9 @@
                 android:id="@+id/imgAvatar"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_gravity="center"
                 android:scaleType="centerCrop"
-                android:src="@color/black" />
+                android:src="@drawable/defaultavatar" />
 
         </androidx.cardview.widget.CardView>
 
@@ -33,7 +34,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_toEndOf="@+id/cvAvatar"
-            android:text="Pham Tuan Giang"
             android:textColor="@color/font"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -45,7 +45,6 @@
             android:layout_below="@+id/tvName"
             android:layout_marginStart="20dp"
             android:layout_toEndOf="@+id/cvAvatar"
-            android:text="Online"
             android:textColor="@color/hint"
             android:textSize="20sp" />
 

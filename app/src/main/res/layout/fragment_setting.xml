@@ -43,7 +43,8 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:scaleType="centerCrop"
-                    android:src="@color/black" />
+                    android:layout_gravity="center"
+                    android:src="@drawable/defaultavatar" />
 
             </androidx.cardview.widget.CardView>
 
@@ -167,6 +168,40 @@
 
             <ImageView
                 android:id="@+id/imgArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llLogout"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/imgLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_logout" />
+
+            <TextView
+                android:id="@+id/tvLogout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:textSize="25sp"
+                android:gravity="center_vertical"
+                android:textColor="@color/font"
+                android:text="@string/logout" />
+
+            <ImageView
+                android:id="@+id/imgArrowLogout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

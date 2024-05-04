@@ -22,7 +22,8 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:scaleType="centerCrop"
-                android:src="@color/black" />
+                android:layout_gravity="center"
+                android:src="@drawable/defaultavatar" />
 
         </androidx.cardview.widget.CardView>
 
@@ -33,7 +34,6 @@
             android:layout_weight="1"
             android:layout_marginStart="20dp"
             android:gravity="center_vertical"
-            android:text="Pham Tuan Giang"
             android:textColor="@color/font"
             android:textSize="15sp"
             android:textStyle="italic" />

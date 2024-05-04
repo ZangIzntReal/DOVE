@@ -34,6 +34,7 @@ class ChatFragment : Fragment() {
     private val chatAdapter by lazy { ChatAdapter(sharedViewModel) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -47,6 +48,9 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.progressBar.visibility = View.VISIBLE
+        binding.rvChats.visibility = View.GONE
 
         // Get current user information
         currentUser = sharedViewModel.currentUser
@@ -62,13 +66,7 @@ class ChatFragment : Fragment() {
 
         /// Get chats from current user
         chatList = currentUser?.chats?.toMutableList() ?: mutableListOf()
-//        val tmpChatList = currentUser?.chats
-//        if (tmpChatList != null) {
-//            chatList = tmpChatList.toMutableList()
-//        } else {
-//            chatList = mutableListOf()
-//        }
-        // Set chats to ChatViewModel
+
         chatViewModel.setChats(chatList)
 
         // Observe LiveData chats from ChatViewModel
@@ -76,6 +74,9 @@ class ChatFragment : Fragment() {
             // Update chats in adapter when data changes
             chatAdapter.setChats(it)
         }
+
+        binding.progressBar.visibility = View.GONE
+        binding.rvChats.visibility = View.VISIBLE
 
         // Set up Listener for chats
         chatAdapter.onChatClick = object : ChatAdapter.OnChatClick {
@@ -88,4 +89,21 @@ class ChatFragment : Fragment() {
         }
     }
 
+//    override fun onResume() {
+//        super.onResume()
+//
+//        // Get chats from current user
+//        chatList = currentUser?.chats?.toMutableList() ?: mutableListOf()
+//
+//        // Set chats to ChatViewModel
+//        chatViewModel.setChats(chatList)
+//
+//        // Observe LiveData chats from ChatViewModel
+//        chatViewModel.chats.observe(viewLifecycleOwner) {
+//            // Update chats in adapter when data changes
+//            binding.progressBar.visibility = View.GONE
+//            binding.rvChats.visibility = View.VISIBLE
+//            chatAdapter.setChats(it)
+//        }
+//    }
 }

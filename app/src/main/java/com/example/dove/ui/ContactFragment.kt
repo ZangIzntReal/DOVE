@@ -46,6 +46,9 @@ class ContactFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.progressBar.visibility = View.VISIBLE
+        binding.rvContacts.visibility = View.GONE
+
         // Lấy thông tin người dùng hiện tại
         currentUser = sharedViewModel.currentUser
         Log.d("ContactFragment", "Current user: $currentUser")
@@ -53,13 +56,15 @@ class ContactFragment : Fragment() {
         // Khởi tạo database
         database = FirebaseDatabase.getInstance()
 
+
+
         // Thiết lập rvContacts
         binding.rvContacts.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = contactAdapter
         }
         // Lấy danh sách contact từ database
-        contactList = currentUser?.contacts as MutableList<Contact>
+        contactList = (currentUser?.contacts as? MutableList<Contact>) ?: mutableListOf()
         Log.d("ContactFragment", "contactList: $contactList")
         // Set danh sách contact vào ContactViewModel
         contactViewModel.setContacts(contactList)
@@ -68,6 +73,13 @@ class ContactFragment : Fragment() {
             Log.d("ContactFragment", "Contacts: ${it.size}")
             contactAdapter.setContacts(it)
         }
+
+        // Hiển thị danh sách contact
+        binding.progressBar.visibility = View.GONE
+        binding.rvContacts.visibility = View.VISIBLE
+
+
+        //
         // Thiết lập listener cho sự kiện thêm contact
         binding.btnAddContact.setOnClickListener {
             val dialog = AddContactDialogFragment()

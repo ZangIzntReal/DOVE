@@ -60,6 +60,10 @@ class MainActivity : AppCompatActivity() {
                     // Khi destination là PersonalFragment, ẩn BottomNavigationView
                     binding.bottomNavigationView.visibility = View.GONE
                 }
+                R.id.profileFragment -> {
+                    // Khi destination là ProfileFragment, ẩn BottomNavigationView
+                    binding.bottomNavigationView.visibility = View.GONE
+                }
                 else -> {
                     // Khi destination không phải là PersonalFragment, hiển thị BottomNavigationView
                     binding.bottomNavigationView.visibility = View.VISIBLE
@@ -92,4 +96,6 @@ class MainActivity : AppCompatActivity() {
         // Đặt labelVisibilityMode để chỉ hiển thị label khi item được chọn
         binding.bottomNavigationView.labelVisibilityMode = BottomNavigationView.LABEL_VISIBILITY_SELECTED
     }
+
+
 }

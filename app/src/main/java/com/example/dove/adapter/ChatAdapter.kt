@@ -4,8 +4,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.dove.R
 import com.example.dove.data.model.Chat
 import com.example.dove.data.model.User
@@ -35,6 +38,7 @@ class ChatAdapter(private val sharedViewModel: SharedViewModel): RecyclerView.Ad
     class ChatViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val tvName = view.findViewById<TextView>(R.id.tvName)
         val tvLastMessage = view.findViewById<TextView>(R.id.tvLastMessage)
+        val imgAvatar = view.findViewById<ImageView>(R.id.imgAvatar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
@@ -69,6 +73,11 @@ class ChatAdapter(private val sharedViewModel: SharedViewModel): RecyclerView.Ad
                     holder.apply {
                         tvName.text = tmpUser?.username
                         tvLastMessage.text = lastMessage
+                        if (tmpUser?.imageUrl != "") {
+                            Glide.with(holder.itemView.context.applicationContext)
+                                .load(tmpUser?.imageUrl?.toUri())
+                                .into(imgAvatar)
+                        }
                     }
                     holder.itemView.setOnClickListener(View.OnClickListener {
                         onChatClick.onChatClick(position)

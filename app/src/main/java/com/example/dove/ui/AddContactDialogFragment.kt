@@ -23,16 +23,17 @@ class AddContactDialogFragment : DialogFragment() {
             val view = inflater.inflate(R.layout.dialog_add_contact, null)
             val editText = view.findViewById<EditText>(R.id.editTextEmail)
             val btnSubmit = view.findViewById<Button>(R.id.btnSubmit)
+            val btnCancel = view.findViewById<Button>(R.id.btnCancel)
 
             btnSubmit.setOnClickListener {
                 listener?.onDialogPositiveClick(editText.text.toString())
                 dialog?.dismiss()
             }
+            btnCancel.setOnClickListener {
+                dialog?.dismiss()
+            }
 
             builder.setView(view)
-                .setNegativeButton("Cancel") { _, _ ->
-                    dialog?.cancel()
-                }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }

@@ -3,7 +3,7 @@ package com.example.dove.data.model
 data class User(
     val userid: String? = "",
     var status : String? = "",
-    val imageUrl : String? = "",
+    var imageUrl : String? = "",
     var username: String? = "",
     val email : String? ="",
     var contacts: List<Contact>? = mutableListOf(),
