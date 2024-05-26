@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/font"
-                android:text="Username"
+                android:text="@string/username"
                 android:textSize="25sp" />
 
             <EditText
@@ -84,38 +84,22 @@
                 android:inputType="text"
                 android:textSize="25sp"
                 android:textColor="@color/font"
+                android:padding="10dp"
                 android:hint="@string/username"
                 android:textColorHint="@color/hint"
-                android:background="@drawable/plain_text"
-                android:visibility="gone" />
+                android:background="@drawable/plain_text"/>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:id="@+id/llFooter"
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnSave"
-                android:layout_width="wrap_content"
-                android:layout_marginEnd="50dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Save" />
-
-            <Button
-                android:id="@+id/btnEdit"
-                android:layout_width="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Edit" />
-        </LinearLayout>
+            android:text="@string/save" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

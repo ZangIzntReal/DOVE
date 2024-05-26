@@ -25,6 +25,7 @@ class ProfileFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private lateinit var currentUser: User
     private lateinit var database: FirebaseDatabase
+    private lateinit var storage: FirebaseStorage
     private val PICK_IMAGE_REQUEST_CODE = 1000
 
     override fun onCreateView(
@@ -40,10 +41,11 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         database = FirebaseDatabase.getInstance()
+        storage = FirebaseStorage.getInstance()
         currentUser = sharedViewModel.currentUser!!
 
         binding.tvEmail.text = currentUser.email
-        binding.tvUsername.text = currentUser.username
+        binding.etUsername.setText(currentUser.username)
 
 
         if (currentUser.imageUrl != "") {
@@ -56,19 +58,13 @@ class ProfileFragment : Fragment() {
             requireActivity().onBackPressed()
         }
 
-        binding.btnEdit.setOnClickListener {
-            binding.tvUsername.visibility = View.GONE
-            binding.etUsername.visibility = View.VISIBLE
-        }
-
         binding.btnSave.setOnClickListener {
             val newUsername = binding.etUsername.text.toString()
             currentUser.username = newUsername
             sharedViewModel.currentUser = currentUser
             database.getReference("Users").child(currentUser.userid.toString()).child("username").setValue(newUsername)
-            binding.tvUsername.text = newUsername
-            binding.tvUsername.visibility = View.VISIBLE
-            binding.etUsername.visibility = View.GONE
+            binding.etUsername.clearFocus()
+            binding.etUsername.setText(newUsername)
         }
 
         binding.cvAvatar.setOnClickListener {
@@ -87,7 +83,7 @@ class ProfileFragment : Fragment() {
             Log.d("UploadImage", "Image URI: $selectedImageUri")
             binding.imgAvatar.setImageURI(selectedImageUri)
 
-            val storageRef = FirebaseStorage.getInstance().reference.child("avatars/${currentUser.userid}")
+            val storageRef = storage.reference.child("avatars/${currentUser.userid}")
 
             // Upload the image to Firebase Storage
             storageRef.putFile(selectedImageUri!!)

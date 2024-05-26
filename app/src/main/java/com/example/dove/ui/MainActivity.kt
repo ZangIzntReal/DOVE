@@ -50,52 +50,60 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Điều hướng giữa các fragment
-        controller = findNavController(R.id.my_nav_host_fragment)
-        binding.bottomNavigationView.setupWithNavController(controller)
+        binding.myNavHostFragment.post {
+            controller = findNavController(R.id.my_nav_host_fragment)
+            binding.bottomNavigationView.setupWithNavController(controller)
 
-        // Thêm listener cho sự kiện thay đổi destination của NavController
-        controller.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.personalChatFragment -> {
-                    // Khi destination là PersonalFragment, ẩn BottomNavigationView
-                    binding.bottomNavigationView.visibility = View.GONE
-                }
-                R.id.profileFragment -> {
-                    // Khi destination là ProfileFragment, ẩn BottomNavigationView
-                    binding.bottomNavigationView.visibility = View.GONE
-                }
-                else -> {
-                    // Khi destination không phải là PersonalFragment, hiển thị BottomNavigationView
-                    binding.bottomNavigationView.visibility = View.VISIBLE
+            // Thêm listener cho sự kiện thay đổi destination của NavController
+            controller.addOnDestinationChangedListener { _, destination, _ ->
+                when (destination.id) {
+                    R.id.personalChatFragment -> {
+                        // Khi destination là PersonalFragment, ẩn BottomNavigationView
+                        binding.bottomNavigationView.visibility = View.GONE
+                    }
+
+                    R.id.profileFragment -> {
+                        // Khi destination là ProfileFragment, ẩn BottomNavigationView
+                        binding.bottomNavigationView.visibility = View.GONE
+                    }
+
+                    else -> {
+                        // Khi destination không phải là PersonalFragment, hiển thị BottomNavigationView
+                        binding.bottomNavigationView.visibility = View.VISIBLE
+                    }
                 }
             }
-        }
 
-        binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
 
-            // Điều hướng đến fragment tương ứng
-            when (item.itemId) {
-                R.id.chatFragment -> {
-                    controller.navigate(R.id.chatFragment)
-                    true
+                // Điều hướng đến fragment tương ứng
+                when (item.itemId) {
+                    R.id.chatFragment -> {
+                        controller.navigate(R.id.chatFragment)
+                        true
+                    }
+
+                    R.id.contactFragment -> {
+                        controller.navigate(R.id.contactFragment)
+                        true
+                    }
+
+                    R.id.settingFragment -> {
+                        controller.navigate(R.id.settingFragment)
+                        true
+                    }
+
+                    else -> false
                 }
-
-                R.id.contactFragment -> {
-                    controller.navigate(R.id.contactFragment)
-                    true
-                }
-
-                R.id.settingFragment -> {
-                    controller.navigate(R.id.settingFragment)
-                    true
-                }
-
-                else -> false
             }
+            // Đặt labelVisibilityMode để chỉ hiển thị label khi item được chọn
+            binding.bottomNavigationView.labelVisibilityMode =
+                BottomNavigationView.LABEL_VISIBILITY_SELECTED
+
+            controller.navigate(R.id.contactFragment)
+
+            binding.bottomNavigationView.selectedItemId = R.id.chatFragment
         }
-        // Đặt labelVisibilityMode để chỉ hiển thị label khi item được chọn
-        binding.bottomNavigationView.labelVisibilityMode = BottomNavigationView.LABEL_VISIBILITY_SELECTED
     }
-
 
 }

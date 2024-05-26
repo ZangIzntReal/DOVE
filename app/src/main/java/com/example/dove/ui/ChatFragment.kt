@@ -89,21 +89,4 @@ class ChatFragment : Fragment() {
         }
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//
-//        // Get chats from current user
-//        chatList = currentUser?.chats?.toMutableList() ?: mutableListOf()
-//
-//        // Set chats to ChatViewModel
-//        chatViewModel.setChats(chatList)
-//
-//        // Observe LiveData chats from ChatViewModel
-//        chatViewModel.chats.observe(viewLifecycleOwner) {
-//            // Update chats in adapter when data changes
-//            binding.progressBar.visibility = View.GONE
-//            binding.rvChats.visibility = View.VISIBLE
-//            chatAdapter.setChats(it)
-//        }
-//    }
 }

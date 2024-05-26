@@ -82,6 +82,7 @@ class PersonalChatFragment : Fragment() {
             messageViewModel.setMessages(messageList)
             messageViewModel.messages.observe(viewLifecycleOwner) {
                 messageAdapter.setMessages(it)
+                binding.rvMessages.scrollToPosition(it.size - 1)
             }
             database.getReference("Users").child(tmpId).get().addOnSuccessListener {
                 val tmpUser = it.getValue(User::class.java)
@@ -94,30 +95,33 @@ class PersonalChatFragment : Fragment() {
         // Attach a listener to read the data at our posts reference
         chatRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // Get the updated chat object
-                val updatedChat = dataSnapshot.getValue(Chat::class.java)
+                if (view != null) {
+                    // Get the updated chat object
+                    val updatedChat = dataSnapshot.getValue(Chat::class.java)
 
-                // Update the current chat in the shared view model
-                sharedViewModel.currentChat = updatedChat
+                    // Update the current chat in the shared view model
+                    sharedViewModel.currentChat = updatedChat
 
-                // Update the current chat in the local variable
-                currentChat = updatedChat
+                    // Update the current chat in the local variable
+                    currentChat = updatedChat
 
-                // Get chat messages
-                var tmpId = ""
-                if (currentUser?.userid == currentChat?.user1Id) {
-                    tmpId = currentChat?.user2Id.toString()
-                } else {
-                    tmpId = currentChat?.user1Id.toString()
-                }
-                messageList = currentChat?.chatMessages as MutableList<Message>
-                messageViewModel.setMessages(messageList)
-                messageViewModel.messages.observe(viewLifecycleOwner) {
-                    messageAdapter.setMessages(it)
-                }
-                database.getReference("Users").child(tmpId).get().addOnSuccessListener {
-                    val tmpUser = it.getValue(User::class.java)
-                    binding.tvName.text = tmpUser?.username
+                    // Get chat messages
+                    var tmpId = ""
+                    if (currentUser?.userid == currentChat?.user1Id) {
+                        tmpId = currentChat?.user2Id.toString()
+                    } else {
+                        tmpId = currentChat?.user1Id.toString()
+                    }
+                    messageList = currentChat?.chatMessages as MutableList<Message>
+                    messageViewModel.setMessages(messageList)
+                    messageViewModel.messages.observe(viewLifecycleOwner) {
+                        messageAdapter.setMessages(it)
+                        binding.rvMessages.scrollToPosition(it.size - 1)
+                    }
+                    database.getReference("Users").child(tmpId).get().addOnSuccessListener {
+                        val tmpUser = it.getValue(User::class.java)
+                        binding.tvName.text = tmpUser?.username
+                    }
                 }
             }
 
@@ -144,6 +148,7 @@ class PersonalChatFragment : Fragment() {
             messageViewModel.setMessages(messageList)
             messageViewModel.messages.observe(viewLifecycleOwner) {
                 messageAdapter.setMessages(it)
+                binding.rvMessages.scrollToPosition(it.size - 1)
             }
             database.getReference("Chats").child(currentChat?.id.toString()).child("chatMessages").setValue(messageList)
         }
@@ -153,11 +158,5 @@ class PersonalChatFragment : Fragment() {
             requireActivity().onBackPressed()
         }
 
-        // Set up more button to logout
-        binding.btnMore.setOnClickListener {
-            sharedViewModel.logout()
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            startActivity(intent)
-        }
     }
 }
