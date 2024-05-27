@@ -12,6 +12,7 @@ import com.example.dove.R
 import com.example.dove.data.model.User
 import com.example.dove.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
@@ -88,9 +89,13 @@ class RegisterActivity : AppCompatActivity() {
                     finish()
                 }
                 else {
-                    // Hiển thị thông báo lỗi nếu đăng ký thất bại
-                    Log.e("RegisterActivity", "Failed to create user", task.exception)
-                    Toast.makeText(this, "Register failed", Toast.LENGTH_SHORT).show()
+                    if (task.exception is FirebaseAuthUserCollisionException) {
+                        // Show a message to the user that the email is already in use
+                        Toast.makeText(this,"The email address is already in use by another account.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // Some other error occurred
+                        Toast.makeText(this, "An error occurred: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
     }

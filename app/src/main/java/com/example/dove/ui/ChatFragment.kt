@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -20,7 +21,10 @@ import com.example.dove.databinding.FragmentChatBinding
 import com.example.dove.viewmodel.ChatViewModel
 import com.example.dove.viewmodel.ContactViewModel
 import com.example.dove.viewmodel.SharedViewModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 
 class ChatFragment : Fragment() {
@@ -65,18 +69,25 @@ class ChatFragment : Fragment() {
         }
 
         /// Get chats from current user
-        chatList = currentUser?.chats?.toMutableList() ?: mutableListOf()
+        database.getReference("Users").child(currentUser?.userid ?: "").get().addOnSuccessListener {
+                if (it.exists()) {
+                    val chats = it.getValue(User::class.java)?.chats ?: mutableListOf()
+                    chatList = chats.toMutableList()
+                    chatViewModel.setChats(chatList)
 
-        chatViewModel.setChats(chatList)
-
-        // Observe LiveData chats from ChatViewModel
-        chatViewModel.chats.observe(viewLifecycleOwner) {
-            // Update chats in adapter when data changes
-            chatAdapter.setChats(it)
-        }
-
-        binding.progressBar.visibility = View.GONE
-        binding.rvChats.visibility = View.VISIBLE
+                    // Observe LiveData chats from ChatViewModel
+                    chatViewModel.chats.observe(viewLifecycleOwner) {
+                        // Update chats in adapter when data changes
+                        chatAdapter.setChats(it)
+                    }
+                    binding.progressBar.visibility = View.GONE
+                    binding.rvChats.visibility = View.VISIBLE
+                }
+            }.addOnFailureListener {
+                binding.progressBar.visibility = View.GONE
+                binding.rvChats.visibility = View.VISIBLE
+                Toast.makeText(requireContext(), "Failed to get chats", Toast.LENGTH_SHORT).show()
+            }
 
         // Set up Listener for chats
         chatAdapter.onChatClick = object : ChatAdapter.OnChatClick {
@@ -87,6 +98,40 @@ class ChatFragment : Fragment() {
                 findNavController().navigate(R.id.personalChatFragment)
             }
         }
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    binding.rvChats.visibility = View.GONE
+                    binding.progressBar.visibility = View.VISIBLE
+                    searchChat(query)
+                    binding.progressBar.visibility = View.GONE
+                    binding.rvChats.visibility = View.VISIBLE
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
     }
+
+    private fun searchChat(query: String) {
+        // Search chat by query
+        val searchResult = mutableListOf<Chat>();
+        chatList.forEach(){
+            database.getReference("Users").child(it.getChatName(currentUser?.userid ?: "")).get().addOnSuccessListener { user ->
+                if (user.exists()) {
+                    val username = user.getValue(User::class.java)?.username ?: ""
+                    if (username.contains(query, ignoreCase = true) == true) {
+                        searchResult.add(it)
+                    }
+                }
+            }
+        }
+        chatAdapter.setChats(searchResult)
+    }
+
 
 }

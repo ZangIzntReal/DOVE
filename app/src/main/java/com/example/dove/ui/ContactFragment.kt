@@ -111,7 +111,7 @@ class ContactFragment : Fragment() {
                                 user2.userid,
                                 mutableListOf()
                             )
-                            database.getReference("Chats").child(id.toString()).setValue(chat)
+                            database.getReference("Chats").child(id).setValue(chat)
                             user1.addNewChat(chat)
                             user2.addNewChat(chat)
                             user1.addExitChat(user2.userid)

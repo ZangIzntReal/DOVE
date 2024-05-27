@@ -6,4 +6,25 @@
     </style>
 
     <style name="Theme.DOVE" parent="Base.Theme.DOVE" />
+
+<!--    <style name="Theme.AppCompat.Light.NoActionBar" parent="Theme.AppCompat.Light">-->
+<!--        <item name="colorPrimary">@color/white</item>-->
+<!--        <item name="colorPrimaryDark">@color/white</item>-->
+<!--        <item name="colorAccent">@color/white</item>-->
+<!--        <item name="searchViewStyle">@style/MySearchViewStyle</item>-->
+<!--    </style>-->
+
+<!--    <style name="MySearchViewStyle" parent="Widget.AppCompat.SearchView">-->
+<!--        &lt;!&ndash; Background for the search query section (e.g. EditText) &ndash;&gt;-->
+<!--        <item name="queryBackground">@color/white</item>-->
+<!--        &lt;!&ndash; Background for the actions section (e.g. voice, submit) &ndash;&gt;-->
+<!--        <item name="submitBackground">@color/white</item>-->
+<!--        &lt;!&ndash; Color of the search text &ndash;&gt;-->
+<!--        <item name="android:textColor">@color/black</item>-->
+<!--        &lt;!&ndash; Color of the search hint text &ndash;&gt;-->
+<!--        <item name="android:textColorHint">@color/hint</item>-->
+<!--        &lt;!&ndash; Color of the search icon &ndash;&gt;-->
+<!--        <item name="searchIcon">@drawable/ic_search_chat</item>-->
+<!--    </style>-->
+
 </resources>

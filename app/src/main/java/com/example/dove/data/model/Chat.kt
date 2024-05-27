@@ -10,4 +10,12 @@ data class Chat(
         val currentMessages = chatMessages?.toMutableList() ?: mutableListOf()
         currentMessages.add(message)
     }
+
+    fun getChatName(currentUserId: String): String {
+        return if (user1Id == currentUserId) {
+            user2Id ?: ""
+        } else {
+            user1Id ?: ""
+        }
+    }
 }
