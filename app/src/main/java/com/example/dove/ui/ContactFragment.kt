@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -19,6 +20,7 @@ import com.example.dove.data.model.User
 import com.example.dove.databinding.FragmentContactBinding
 import com.example.dove.viewmodel.ContactViewModel
 import com.example.dove.viewmodel.SharedViewModel
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.FirebaseDatabase
 
 class ContactFragment : Fragment() {
@@ -78,8 +80,6 @@ class ContactFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
         binding.rvContacts.visibility = View.VISIBLE
 
-
-        //
         // Thiết lập listener cho sự kiện thêm contact
         binding.btnAddContact.setOnClickListener {
             val dialog = AddContactDialogFragment()
@@ -129,6 +129,21 @@ class ContactFragment : Fragment() {
                 }
             }
         }
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    binding.rvContacts.visibility = View.GONE
+                    binding.progressBar.visibility = View.VISIBLE
+                    searchContact(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
     }
 
     private fun checkNotExistingChat(user1: User, user2: User): Boolean {
@@ -185,5 +200,28 @@ class ContactFragment : Fragment() {
         sharedViewModel.currentUser = tmpUser
         currentUser = tmpUser // Cập nhật currentUser trong ContactFragment
         database.getReference("Users").child(currentUser?.userid.toString()).setValue(tmpUser)
+    }
+
+    private fun searchContact(query: String) {
+        val tasks = contactList.map { contact ->
+            database.getReference("Users").child(contact.id.toString()).get().continueWith { task ->
+                if (task.isSuccessful) {
+                    val user = task.result.getValue(User::class.java)
+                    if (user?.email?.contains(query, ignoreCase = true) == true) {
+                        contact
+                    } else {
+                        null
+                    }
+                } else {
+                    null
+                }
+            }
+        }
+        Tasks.whenAllSuccess<Contact>(tasks).addOnSuccessListener { results ->
+            val searchResult = results.filterNotNull()
+            contactAdapter.setContacts(searchResult)
+            binding.progressBar.visibility = View.GONE
+            binding.rvContacts.visibility = View.VISIBLE
+        }
     }
 }

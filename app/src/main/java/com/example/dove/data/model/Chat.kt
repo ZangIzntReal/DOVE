@@ -13,9 +13,9 @@ data class Chat(
 
     fun getChatName(currentUserId: String): String {
         return if (user1Id == currentUserId) {
-            user2Id ?: ""
+            return user2Id ?: ""
         } else {
-            user1Id ?: ""
+            return user1Id ?: ""
         }
     }
 }

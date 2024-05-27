@@ -1,7 +1,9 @@
 package com.example.dove.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import com.google.android.gms.tasks.Tasks
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -105,8 +107,6 @@ class ChatFragment : Fragment() {
                     binding.rvChats.visibility = View.GONE
                     binding.progressBar.visibility = View.VISIBLE
                     searchChat(query)
-                    binding.progressBar.visibility = View.GONE
-                    binding.rvChats.visibility = View.VISIBLE
                 }
                 return true
             }
@@ -118,19 +118,26 @@ class ChatFragment : Fragment() {
     }
 
     private fun searchChat(query: String) {
-        // Search chat by query
-        val searchResult = mutableListOf<Chat>();
-        chatList.forEach(){
-            database.getReference("Users").child(it.getChatName(currentUser?.userid ?: "")).get().addOnSuccessListener { user ->
-                if (user.exists()) {
-                    val username = user.getValue(User::class.java)?.username ?: ""
-                    if (username.contains(query, ignoreCase = true) == true) {
-                        searchResult.add(it)
+        val tasks = chatList.map { chat ->
+            database.getReference("Users").child(chat.getChatName(currentUser?.userid ?: "")).get().continueWith { task ->
+                if (task.isSuccessful) {
+                    val user = task.result.getValue(User::class.java)
+                    if (user?.username?.contains(query, ignoreCase = true) == true) {
+                        chat
+                    } else {
+                        null
                     }
+                } else {
+                    null
                 }
             }
         }
-        chatAdapter.setChats(searchResult)
+        Tasks.whenAllSuccess<Chat>(tasks).addOnSuccessListener { results ->
+            val searchResult = results.filterNotNull()
+            chatAdapter.setChats(searchResult)
+            binding.progressBar.visibility = View.GONE
+            binding.rvChats.visibility = View.VISIBLE
+        }
     }
 
 
